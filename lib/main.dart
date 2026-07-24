@@ -40,6 +40,9 @@ class _SchoolErpAppState extends State<SchoolErpApp> {
       theme: ThemeData(
         primaryColor: const Color(0xFFE8342A),
         scaffoldBackgroundColor: Colors.white,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        splashFactory: NoSplash.splashFactory,
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFFE8342A),
           foregroundColor: Colors.white,

@@ -24,6 +24,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     final user = dataService.currentUser;
     final years = user.sessions;
     final currentYear = selectedYear ?? user.academicYear;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isCompact = screenWidth < 360;
 
     return Container(
       decoration: const BoxDecoration(
@@ -34,74 +36,89 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: isCompact ? 8 : 12, vertical: 6),
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.menu, color: AppColors.textWhite, size: 24),
+                    icon: Icon(Icons.menu, color: AppColors.textWhite, size: isCompact ? 22 : 24),
                     onPressed: onMenuTap,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                   ),
                   Container(
-                    width: 42,
-                    height: 42,
+                    width: isCompact ? 36 : 42,
+                    height: isCompact ? 36 : 42,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text('IJS', style: TextStyle(
                         color: AppColors.primaryRed,
                         fontWeight: FontWeight.w700,
-                        fontSize: 14,
+                        fontSize: isCompact ? 12 : 14,
                       )),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: isCompact ? 6 : 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           user.school,
-                          style: AppTextStyles.headerTitle,
-                          maxLines: 2,
+                          style: TextStyle(
+                            color: AppColors.textWhite,
+                            fontSize: isCompact ? 13 : 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
                           user.name,
-                          style: AppTextStyles.headerSubtitle,
+                          style: TextStyle(
+                            color: AppColors.textWhite,
+                            fontSize: isCompact ? 10 : 12,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.search, color: AppColors.textWhite, size: 22),
-                    onPressed: onSearchTap,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.circular(15),
+                  if (!isCompact)
+                    IconButton(
+                      icon: const Icon(Icons.search, color: AppColors.textWhite, size: 22),
+                      onPressed: onSearchTap,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                     ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: currentYear,
-                        isDense: true,
-                        dropdownColor: AppColors.primaryRed,
-                        icon: const Icon(Icons.arrow_drop_down, color: Colors.white, size: 18),
-                        style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
-                        items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
-                        onChanged: onYearChanged,
+                  if (!isCompact)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: currentYear,
+                          isDense: true,
+                          dropdownColor: AppColors.primaryRed,
+                          icon: const Icon(Icons.arrow_drop_down, color: Colors.white, size: 18),
+                          style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                          items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
+                          onChanged: onYearChanged,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: isCompact ? 4 : 6),
                   GestureDetector(
                     onTap: () => _showProfileSheet(context, user),
                     child: Container(
-                      width: 36,
-                      height: 36,
+                      width: isCompact ? 32 : 36,
+                      height: isCompact ? 32 : 36,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
@@ -117,10 +134,10 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       child: Center(
                         child: Text(
                           user.initials,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primaryRed,
                             fontWeight: FontWeight.w800,
-                            fontSize: 13,
+                            fontSize: isCompact ? 11 : 13,
                           ),
                         ),
                       ),

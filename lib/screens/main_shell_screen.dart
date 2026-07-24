@@ -256,33 +256,36 @@ class _MainShellScreenState extends State<MainShellScreen> {
         sections: dataService.menuSections,
         onItemTap: _onDrawerItemTap,
       ),
-      body: Column(
-        children: [
-          AppHeader(
-            onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
-            onSearchTap: () => Navigator.push(context, SlideRightRoute(page: const SearchScreen())),
-            selectedYear: appState.selectedAcademicYear,
-            onYearChanged: (val) => appState.setAcademicYear(val ?? appState.selectedAcademicYear),
-          ),
-          TopTabBar(
-            tabs: _tabs,
-            selectedIndex: _selectedTab,
-            onTabChanged: (i) => setState(() {
-              _selectedTab = i;
-              _bottomNavIndex = 0;
-            }),
-          ),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
-              transitionBuilder: (child, animation) => FadeTransition(
-                opacity: animation,
-                child: child,
-              ),
-              child: _buildBottomNavContent(),
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            AppHeader(
+              onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
+              onSearchTap: () => Navigator.push(context, SlideRightRoute(page: const SearchScreen())),
+              selectedYear: appState.selectedAcademicYear,
+              onYearChanged: (val) => appState.setAcademicYear(val ?? appState.selectedAcademicYear),
             ),
-          ),
-        ],
+            TopTabBar(
+              tabs: _tabs,
+              selectedIndex: _selectedTab,
+              onTabChanged: (i) => setState(() {
+                _selectedTab = i;
+                _bottomNavIndex = 0;
+              }),
+            ),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: child,
+                ),
+                child: _buildBottomNavContent(),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _bottomNavIndex,

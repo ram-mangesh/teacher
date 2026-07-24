@@ -13,21 +13,26 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: AppDimensions.bottomNavHeight,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, -2))],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _NavItem(icon: Icons.home, label: 'Home', index: 0),
-          _NavItem(icon: Icons.calendar_today, label: 'Timetable', index: 1, secondaryIcon: Icons.edit, secondaryColor: AppColors.primaryRed),
-          _NavItem(icon: Icons.check_circle, label: 'Approvals', index: 2, iconColor: AppColors.accentGreen),
-          _NavItem(icon: Icons.notifications_outlined, label: 'Notifications', index: 3, hasBadge: true),
-          _NavItem(icon: Icons.person_outline, label: 'Profile', index: 4),
-        ],
+    final screenWidth = MediaQuery.of(context).size.width;
+    final navHeight = screenWidth < 360 ? 56.0 : AppDimensions.bottomNavHeight;
+
+    return SafeArea(
+      top: false,
+      child: Container(
+        height: navHeight,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, -2))],
+        ),
+        child: Row(
+          children: const [
+            _NavItem(icon: Icons.home, label: 'Home', index: 0),
+            _NavItem(icon: Icons.calendar_today, label: 'Timetable', index: 1, secondaryIcon: Icons.edit, secondaryColor: AppColors.primaryRed),
+            _NavItem(icon: Icons.check_circle, label: 'Approvals', index: 2, iconColor: AppColors.accentGreen),
+            _NavItem(icon: Icons.notifications_outlined, label: 'Notifs', index: 3, hasBadge: true),
+            _NavItem(icon: Icons.person_outline, label: 'Profile', index: 4),
+          ],
+        ),
       ),
     );
   }
@@ -59,14 +64,13 @@ class _NavItem extends StatelessWidget {
         final navState = context.findAncestorStateOfType<_BottomNavWidgetState>();
         final isSelected = navState?.currentIndex == index;
 
-        return GestureDetector(
-          onTap: () {
-            final navState = context.findAncestorStateOfType<_BottomNavWidgetState>();
-            navState?.onTap(index);
-          },
-          behavior: HitTestBehavior.opaque,
-          child: SizedBox(
-            width: 60,
+        return Expanded(
+          child: GestureDetector(
+            onTap: () {
+              final navState = context.findAncestorStateOfType<_BottomNavWidgetState>();
+              navState?.onTap(index);
+            },
+            behavior: HitTestBehavior.opaque,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -123,12 +127,15 @@ class _NavItem extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: isSelected ? AppColors.primaryRed : AppColors.textSecondary,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: isSelected ? AppColors.primaryRed : AppColors.textSecondary,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    ),
                   ),
                 ),
               ],

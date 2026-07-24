@@ -113,8 +113,11 @@ class _ErpHomeScreenState extends State<ErpHomeScreen> {
   }
 
   Widget _buildQuickStats(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isCompact = screenWidth < 360;
+
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(isCompact ? 10 : 14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [AppColors.primaryRed, AppColors.primaryRed.withOpacity(0.8)],
@@ -133,20 +136,20 @@ class _ErpHomeScreenState extends State<ErpHomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Today\'s Overview',
-            style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700),
+            style: TextStyle(color: Colors.white, fontSize: isCompact ? 13 : 15, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: isCompact ? 8 : 12),
           Row(
             children: [
-              _statItem(Icons.groups, 'Students', '347'),
-              const SizedBox(width: 8),
-              _statItem(Icons.person, 'Staff', '28'),
-              const SizedBox(width: 8),
-              _statItem(Icons.check_circle, 'Present', '312'),
-              const SizedBox(width: 8),
-              _statItem(Icons.cancel, 'Absent', '35'),
+              _statItem(Icons.groups, 'Students', '347', isCompact),
+              SizedBox(width: isCompact ? 4 : 8),
+              _statItem(Icons.person, 'Staff', '28', isCompact),
+              SizedBox(width: isCompact ? 4 : 8),
+              _statItem(Icons.check_circle, 'Present', '312', isCompact),
+              SizedBox(width: isCompact ? 4 : 8),
+              _statItem(Icons.cancel, 'Absent', '35', isCompact),
             ],
           ),
         ],
@@ -154,20 +157,23 @@ class _ErpHomeScreenState extends State<ErpHomeScreen> {
     );
   }
 
-  Widget _statItem(IconData icon, String label, String value) {
+  Widget _statItem(IconData icon, String label, String value, bool isCompact) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        padding: EdgeInsets.symmetric(vertical: isCompact ? 6 : 8, horizontal: isCompact ? 2 : 4),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           children: [
-            Icon(icon, color: Colors.white, size: 20),
-            const SizedBox(height: 4),
-            Text(value, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700)),
-            Text(label, style: const TextStyle(color: Colors.white70, fontSize: 10)),
+            Icon(icon, color: Colors.white, size: isCompact ? 16 : 20),
+            SizedBox(height: isCompact ? 2 : 4),
+            Text(value, style: TextStyle(color: Colors.white, fontSize: isCompact ? 14 : 16, fontWeight: FontWeight.w700)),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(label, style: TextStyle(color: Colors.white70, fontSize: isCompact ? 8 : 10)),
+            ),
           ],
         ),
       ),

@@ -15,15 +15,21 @@ class CalendarStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final startOfWeek = selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isCompact = screenWidth < 380;
 
     return Container(
-      height: 80,
+      height: isCompact ? 72 : 80,
       color: AppColors.backgroundGrey,
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.chevron_left, size: 20),
-            onPressed: () => onDateSelected(selectedDate.subtract(const Duration(days: 7))),
+          SizedBox(
+            width: isCompact ? 32 : 40,
+            child: IconButton(
+              icon: Icon(Icons.chevron_left, size: isCompact ? 18 : 20),
+              padding: EdgeInsets.zero,
+              onPressed: () => onDateSelected(selectedDate.subtract(const Duration(days: 7))),
+            ),
           ),
           Expanded(
             child: Row(
@@ -36,8 +42,8 @@ class CalendarStrip extends StatelessWidget {
                 return GestureDetector(
                   onTap: () => onDateSelected(date),
                   child: Container(
-                    width: 40,
-                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    width: isCompact ? 34 : 40,
+                    padding: EdgeInsets.symmetric(vertical: isCompact ? 4 : 6),
                     decoration: isSelected
                         ? BoxDecoration(
                             color: AppColors.primaryRed,
@@ -45,19 +51,23 @@ class CalendarStrip extends StatelessWidget {
                           )
                         : null,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          _getDayName(date.weekday),
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: isSelected ? Colors.white : AppColors.textSecondary,
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            _getDayName(date.weekday),
+                            style: TextStyle(
+                              fontSize: isCompact ? 9 : 10,
+                              color: isSelected ? Colors.white : AppColors.textSecondary,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: isCompact ? 2 : 4),
                         Text(
                           '${date.day}',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: isCompact ? 14 : 16,
                             fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
                             color: isSelected ? Colors.white : AppColors.textPrimary,
                           ),
@@ -69,9 +79,13 @@ class CalendarStrip extends StatelessWidget {
               }),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.chevron_right, size: 20),
-            onPressed: () => onDateSelected(selectedDate.add(const Duration(days: 7))),
+          SizedBox(
+            width: isCompact ? 32 : 40,
+            child: IconButton(
+              icon: Icon(Icons.chevron_right, size: isCompact ? 18 : 20),
+              padding: EdgeInsets.zero,
+              onPressed: () => onDateSelected(selectedDate.add(const Duration(days: 7))),
+            ),
           ),
         ],
       ),

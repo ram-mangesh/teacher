@@ -68,78 +68,81 @@ class _FeatureGridTileState extends State<FeatureGridTile>
             child: child,
           );
         },
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.cardWhite,
-            borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.06),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(widget.icon, size: 36, color: AppColors.primaryRed),
-                    const SizedBox(height: 8),
-                    Text(
-                      widget.label,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.tileLabel,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+        child: Material(
+          color: AppColors.cardWhite,
+          borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.06),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
                 ),
-              ),
-              if (widget.hasFavoriteStar)
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: GestureDetector(
-                    onTap: () => widget.onFavoriteToggle?.call(!widget.isFavorite),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      transitionBuilder: (child, anim) => ScaleTransition(
-                        scale: anim,
-                        child: child,
+              ],
+            ),
+            child: Stack(
+              children: [
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(widget.icon, size: 36, color: AppColors.primaryRed),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.label,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.tileLabel,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      child: Icon(
-                        widget.isFavorite ? Icons.star : Icons.star_border,
-                        key: ValueKey(widget.isFavorite),
-                        color: AppColors.starYellow,
-                        size: 20,
+                    ],
+                  ),
+                ),
+                if (widget.hasFavoriteStar)
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: GestureDetector(
+                      onTap: () => widget.onFavoriteToggle?.call(!widget.isFavorite),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        transitionBuilder: (child, anim) => ScaleTransition(
+                          scale: anim,
+                          child: child,
+                        ),
+                        child: Icon(
+                          widget.isFavorite ? Icons.star : Icons.star_border,
+                          key: ValueKey(widget.isFavorite),
+                          color: AppColors.starYellow,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              if (widget.badgeCount != null && widget.badgeCount! > 0)
-                Positioned(
-                  top: 4,
-                  right: widget.hasFavoriteStar ? 28 : 4,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: const BoxDecoration(
-                      color: AppColors.badgeRed,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${widget.badgeCount}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
+                if (widget.badgeCount != null && widget.badgeCount! > 0)
+                  Positioned(
+                    top: 4,
+                    right: widget.hasFavoriteStar ? 28 : 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: const BoxDecoration(
+                        color: AppColors.badgeRed,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${widget.badgeCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
