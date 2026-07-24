@@ -25,12 +25,46 @@ class BottomNavBar extends StatelessWidget {
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, -2))],
         ),
         child: Row(
-          children: const [
-            _NavItem(icon: Icons.home, label: 'Home', index: 0),
-            _NavItem(icon: Icons.calendar_today, label: 'Timetable', index: 1, secondaryIcon: Icons.edit, secondaryColor: AppColors.primaryRed),
-            _NavItem(icon: Icons.check_circle, label: 'Approvals', index: 2, iconColor: AppColors.accentGreen),
-            _NavItem(icon: Icons.notifications_outlined, label: 'Notifs', index: 3, hasBadge: true),
-            _NavItem(icon: Icons.person_outline, label: 'Profile', index: 4),
+          children: [
+            _NavItem(
+              icon: Icons.home,
+              label: 'Home',
+              index: 0,
+              isSelected: currentIndex == 0,
+              onTap: () => onTap(0),
+            ),
+            _NavItem(
+              icon: Icons.calendar_today,
+              label: 'Timetable',
+              index: 1,
+              isSelected: currentIndex == 1,
+              onTap: () => onTap(1),
+              secondaryIcon: Icons.edit,
+              secondaryColor: AppColors.primaryRed,
+            ),
+            _NavItem(
+              icon: Icons.check_circle,
+              label: 'Approvals',
+              index: 2,
+              isSelected: currentIndex == 2,
+              onTap: () => onTap(2),
+              iconColor: AppColors.accentGreen,
+            ),
+            _NavItem(
+              icon: Icons.notifications_outlined,
+              label: 'Notifs',
+              index: 3,
+              isSelected: currentIndex == 3,
+              onTap: () => onTap(3),
+              hasBadge: true,
+            ),
+            _NavItem(
+              icon: Icons.person_outline,
+              label: 'Profile',
+              index: 4,
+              isSelected: currentIndex == 4,
+              onTap: () => onTap(4),
+            ),
           ],
         ),
       ),
@@ -42,6 +76,8 @@ class _NavItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final int index;
+  final bool isSelected;
+  final VoidCallback onTap;
   final bool hasBadge;
   final IconData? secondaryIcon;
   final Color? secondaryColor;
@@ -51,6 +87,8 @@ class _NavItem extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.index,
+    required this.isSelected,
+    required this.onTap,
     this.hasBadge = false,
     this.secondaryIcon,
     this.secondaryColor,
@@ -59,116 +97,80 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final navState = context.findAncestorStateOfType<_BottomNavWidgetState>();
-        final isSelected = navState?.currentIndex == index;
-
-        return Expanded(
-          child: GestureDetector(
-            onTap: () {
-              final navState = context.findAncestorStateOfType<_BottomNavWidgetState>();
-              navState?.onTap(index);
-            },
-            behavior: HitTestBehavior.opaque,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
               children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: isSelected
-                          ? const BoxDecoration(
-                              color: Color(0xFFFFF0ED),
-                              shape: BoxShape.circle,
-                            )
-                          : null,
-                      child: secondaryIcon != null
-                          ? Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Icon(
-                                  icon,
-                                  color: iconColor ?? (isSelected ? AppColors.primaryRed : AppColors.textSecondary),
-                                  size: 22,
-                                ),
-                                Positioned(
-                                  right: -4,
-                                  bottom: -2,
-                                  child: Icon(
-                                    secondaryIcon,
-                                    color: secondaryColor ?? AppColors.primaryRed,
-                                    size: 12,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Icon(
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: isSelected
+                      ? const BoxDecoration(
+                          color: Color(0xFFFFF0ED),
+                          shape: BoxShape.circle,
+                        )
+                      : null,
+                  child: secondaryIcon != null
+                      ? Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(
                               icon,
                               color: iconColor ?? (isSelected ? AppColors.primaryRed : AppColors.textSecondary),
-                              size: 24,
+                              size: 22,
                             ),
-                    ),
-                    if (hasBadge)
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: AppColors.badgeRed,
-                            shape: BoxShape.circle,
-                          ),
+                            Positioned(
+                              right: -4,
+                              bottom: -2,
+                              child: Icon(
+                                secondaryIcon,
+                                color: secondaryColor ?? AppColors.primaryRed,
+                                size: 12,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Icon(
+                          icon,
+                          color: iconColor ?? (isSelected ? AppColors.primaryRed : AppColors.textSecondary),
+                          size: 24,
                         ),
-                      ),
-                  ],
                 ),
-                const SizedBox(height: 2),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: isSelected ? AppColors.primaryRed : AppColors.textSecondary,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                if (hasBadge)
+                  Positioned(
+                    right: 2,
+                    top: 2,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: AppColors.badgeRed,
+                        shape: BoxShape.circle,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
-          ),
-        );
-      },
+            const SizedBox(height: 2),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isSelected ? AppColors.primaryRed : AppColors.textSecondary,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
-  }
-}
-
-class BottomNavBarWidget extends StatefulWidget {
-  final int currentIndex;
-  final ValueChanged<int> onTap;
-  final Widget child;
-
-  const BottomNavBarWidget({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-    required this.child,
-  });
-
-  @override
-  State<BottomNavBarWidget> createState() => _BottomNavWidgetState();
-}
-
-class _BottomNavWidgetState extends State<BottomNavBarWidget> {
-  int get currentIndex => widget.currentIndex;
-  void onTap(int index) => widget.onTap(index);
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
   }
 }
