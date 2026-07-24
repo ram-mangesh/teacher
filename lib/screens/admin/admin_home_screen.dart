@@ -420,6 +420,8 @@ class NaacGradesScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         bottom: TabBar(
           isScrollable: true,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
           indicatorColor: Colors.white,
           indicatorWeight: 3,
           tabs: naacState.sections.map((s) => Tab(text: s.name)).toList(),

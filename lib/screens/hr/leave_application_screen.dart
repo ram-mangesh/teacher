@@ -37,6 +37,8 @@ class _LeaveApplicationScreenState extends State<LeaveApplicationScreen> with Si
         foregroundColor: Colors.white,
         bottom: TabBar(
           controller: _tabController,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
           indicatorColor: Colors.white,
           indicatorWeight: 3,
           tabs: const [
