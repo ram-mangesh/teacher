@@ -8,10 +8,21 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: StaffAttendanceCard(
-        user: dataService.currentUser,
-        attendance: dataService.currentAttendance,
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text('Profile'),
+        backgroundColor: AppColors.primaryRed,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        child: StaffAttendanceCard(
+          user: dataService.currentUser,
+          attendance: dataService.currentAttendance,
+        ),
       ),
     );
   }

@@ -5,7 +5,6 @@ import '../components/app_header.dart';
 import '../components/top_tab_bar.dart';
 import '../components/bottom_nav_bar.dart';
 import '../components/drawer_menu.dart';
-import '../components/bottom_sheet_tabs.dart';
 import '../components/class_section_picker.dart';
 import '../services/data_service.dart';
 import '../screens/erp/erp_home_screen.dart';
@@ -68,11 +67,29 @@ class _MainShellScreenState extends State<MainShellScreen> {
   Widget _buildBottomNavContent() {
     switch (_bottomNavIndex) {
       case 0: return _buildTabContent();
-      case 1: return _buildTabContent();
-      case 2: return const NotificationsScreen();
-      case 3: return const NotificationsScreen();
-      case 4: return const ProfileScreen();
       default: return _buildTabContent();
+    }
+  }
+
+  void _onBottomNavTap(int i) {
+    if (i == _bottomNavIndex && i == 0) return;
+
+    switch (i) {
+      case 0:
+        setState(() => _bottomNavIndex = 0);
+        break;
+      case 1:
+        Navigator.push(context, SlideRightRoute(page: const TimeTableScreen()));
+        break;
+      case 2:
+        Navigator.push(context, SlideRightRoute(page: const LeaveApplicationScreen()));
+        break;
+      case 3:
+        Navigator.push(context, SlideRightRoute(page: const NotificationsScreen()));
+        break;
+      case 4:
+        Navigator.push(context, SlideRightRoute(page: const ProfileScreen()));
+        break;
     }
   }
 
@@ -289,13 +306,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _bottomNavIndex,
-        onTap: (i) {
-          if (i == 1) {
-            BottomSheetTabs.show(context);
-          } else {
-            setState(() => _bottomNavIndex = i);
-          }
-        },
+        onTap: _onBottomNavTap,
       ),
     );
   }
